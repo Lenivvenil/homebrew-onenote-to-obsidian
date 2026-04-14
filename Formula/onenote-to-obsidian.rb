@@ -8,6 +8,13 @@ class OnenoteToObsidian < Formula
   license "MIT"
   head "https://github.com/Lenivvenil/onenote-to-obsidian.git", branch: "main"
 
+  bottle do
+    root_url "https://github.com/Lenivvenil/homebrew-onenote-to-obsidian/releases/download/onenote-to-obsidian-1.1.0"
+    rebuild 1
+    sha256 cellar: :any, arm64_sequoia: "d3512f40db4cbfdc3cd12c78b8fd683b96c0ad43cf44e3e5d63acb5f694c997b"
+    sha256 cellar: :any, arm64_sonoma:  "f138dbffe5122206c3eb77f8d5dc92c3e4122e182696c45db2585049ee862679"
+  end
+
   livecheck do
     url :stable
     strategy :pypi
