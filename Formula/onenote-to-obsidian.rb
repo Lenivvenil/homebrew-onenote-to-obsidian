@@ -3,9 +3,15 @@ class OnenoteToObsidian < Formula
 
   desc "Export OneNote notebooks to Obsidian-compatible Markdown via Microsoft Graph API"
   homepage "https://github.com/Lenivvenil/onenote-to-obsidian"
-  url "https://github.com/Lenivvenil/onenote-to-obsidian/archive/refs/tags/v1.1.0.tar.gz"
-  sha256 "ec1c6719ad16192639c46508c7da14792d2b34ce81c14263f21290fb7fc4f225"
+  url "https://files.pythonhosted.org/packages/91/86/b7d773c3d015a0db7f0233946554a405be1686b651affbd71ffe69129fef/onenote_to_obsidian-1.1.0.tar.gz"
+  sha256 "56b6428bb17a47525962d050c3f5f48ab70ddd48ad74b950585e6d4543a45da2"
   license "MIT"
+  head "https://github.com/Lenivvenil/onenote-to-obsidian.git", branch: "main"
+
+  livecheck do
+    url :stable
+    strategy :pypi
+  end
 
   depends_on "python@3.12"
   depends_on "openssl@3"
