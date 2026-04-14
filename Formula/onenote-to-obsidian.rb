@@ -13,8 +13,8 @@ class OnenoteToObsidian < Formula
     strategy :pypi
   end
 
-  depends_on "python@3.12"
   depends_on "openssl@3"
+  depends_on "python@3.12"
   depends_on "rust" => :build
 
   resource "beautifulsoup4" do
