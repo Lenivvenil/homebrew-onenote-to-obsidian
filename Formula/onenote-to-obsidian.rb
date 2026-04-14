@@ -13,9 +13,9 @@ class OnenoteToObsidian < Formula
     strategy :pypi
   end
 
-  depends_on "python@3.12"
-  depends_on "openssl@3"
   depends_on "rust" => :build
+  depends_on "openssl@3"
+  depends_on "python@3.12"
 
   resource "beautifulsoup4" do
     url "https://files.pythonhosted.org/packages/c3/b0/1c6a16426d389813b48d95e26898aff79abbde42ad353958ad95cc8c9b21/beautifulsoup4-4.14.3.tar.gz"
