@@ -13,6 +13,7 @@ class OnenoteToObsidian < Formula
     strategy :pypi
   end
 
+  depends_on "cryptography"
   depends_on "python@3.12"
 
   resource "beautifulsoup4" do
@@ -25,19 +26,9 @@ class OnenoteToObsidian < Formula
     sha256 "e887ab5cee78ea814d3472169153c2d12cd43b14bd03329a39a9c6e2e80bfba7"
   end
 
-  resource "cffi" do
-    url "https://files.pythonhosted.org/packages/eb/56/b1ba7935a17738ae8453301356628e8147c79dbb825bcbc73dc7401f9846/cffi-2.0.0.tar.gz"
-    sha256 "44d1b5909021139fe36001ae048dbdde8214afa20200eda0f64c068cac5d5529"
-  end
-
   resource "charset-normalizer" do
     url "https://files.pythonhosted.org/packages/e7/a1/67fe25fac3c7642725500a3f6cfe5821ad557c3abb11c9d20d12c7008d3e/charset_normalizer-3.4.7.tar.gz"
     sha256 "ae89db9e5f98a11a4bf50407d4363e7b09b31e55bc117b4f7d80aab97ba009e5"
-  end
-
-  resource "cryptography" do
-    url "https://files.pythonhosted.org/packages/a7/7f/cd42fc3614386bc0c12f0cb3c4ae1fc2bbca5c9662dfed031514911d513d/cryptography-46.0.7-cp38-abi3-macosx_10_9_universal2.whl"
-    sha256 "462ad5cb1c148a22b2e3bcc5ad52504dff325d17daf5df8d88c17dda1f75f2a4"
   end
 
   resource "idna" do
@@ -53,11 +44,6 @@ class OnenoteToObsidian < Formula
   resource "msal" do
     url "https://files.pythonhosted.org/packages/de/cb/b02b0f748ac668922364ccb3c3bff5b71628a05f5adfec2ba2a5c3031483/msal-1.36.0.tar.gz"
     sha256 "3f6a4af2b036b476a4215111c4297b4e6e236ed186cd804faefba23e4990978b"
-  end
-
-  resource "pycparser" do
-    url "https://files.pythonhosted.org/packages/1b/7d/92392ff7815c21062bea51aa7b87d45576f649f16458d78b7cf94b9ab2e6/pycparser-3.0.tar.gz"
-    sha256 "600f49d217304a5902ac3c37e1281c9fe94e4d0489de643a9504c5cdfdfc6b29"
   end
 
   resource "pyjwt" do
@@ -91,20 +77,7 @@ class OnenoteToObsidian < Formula
   end
 
   def install
-    venv = virtualenv_create(libexec, "python3.12")
-
-    # Install cryptography from pre-built wheel directly (bypasses --no-binary=:all:)
-    system libexec/"bin/pip", "install", "--no-deps", "--ignore-installed",
-           resource("cryptography").cached_download
-
-    # Install all other resources from source
-    resources.each do |r|
-      next if r.name == "cryptography"
-
-      r.stage { venv.pip_install Pathname.pwd }
-    end
-
-    venv.pip_install_and_link buildpath
+    virtualenv_install_with_resources
   end
 
   test do
