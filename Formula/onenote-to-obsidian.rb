@@ -8,20 +8,11 @@ class OnenoteToObsidian < Formula
   license "MIT"
   head "https://github.com/Lenivvenil/onenote-to-obsidian.git", branch: "main"
 
-  bottle do
-    root_url "https://github.com/Lenivvenil/homebrew-onenote-to-obsidian/releases/download/onenote-to-obsidian-1.1.0"
-    rebuild 1
-    sha256 cellar: :any, arm64_sequoia: "d3512f40db4cbfdc3cd12c78b8fd683b96c0ad43cf44e3e5d63acb5f694c997b"
-    sha256 cellar: :any, arm64_sonoma:  "f138dbffe5122206c3eb77f8d5dc92c3e4122e182696c45db2585049ee862679"
-  end
-
   livecheck do
     url :stable
     strategy :pypi
   end
 
-  depends_on "rust" => :build
-  depends_on "openssl@3"
   depends_on "python@3.12"
 
   resource "beautifulsoup4" do
@@ -34,19 +25,9 @@ class OnenoteToObsidian < Formula
     sha256 "e887ab5cee78ea814d3472169153c2d12cd43b14bd03329a39a9c6e2e80bfba7"
   end
 
-  resource "cffi" do
-    url "https://files.pythonhosted.org/packages/eb/56/b1ba7935a17738ae8453301356628e8147c79dbb825bcbc73dc7401f9846/cffi-2.0.0.tar.gz"
-    sha256 "44d1b5909021139fe36001ae048dbdde8214afa20200eda0f64c068cac5d5529"
-  end
-
   resource "charset-normalizer" do
     url "https://files.pythonhosted.org/packages/e7/a1/67fe25fac3c7642725500a3f6cfe5821ad557c3abb11c9d20d12c7008d3e/charset_normalizer-3.4.7.tar.gz"
     sha256 "ae89db9e5f98a11a4bf50407d4363e7b09b31e55bc117b4f7d80aab97ba009e5"
-  end
-
-  resource "cryptography" do
-    url "https://files.pythonhosted.org/packages/47/93/ac8f3d5ff04d54bc814e961a43ae5b0b146154c89c61b47bb07557679b18/cryptography-46.0.7.tar.gz"
-    sha256 "e4cfd68c5f3e0bfdad0d38e023239b96a2fe84146481852dffbcca442c245aa5"
   end
 
   resource "idna" do
@@ -100,7 +81,12 @@ class OnenoteToObsidian < Formula
   end
 
   def install
-    virtualenv_install_with_resources
+    venv = virtualenv_create(libexec, "python3.12")
+    venv.pip_install resources
+    venv.pip_install_and_link(buildpath, build_isolation: false)
+
+    # Install cryptography and cffi from wheels (avoids Rust/LLVM build dependency)
+    system libexec/"bin/pip", "install", "--only-binary=:all:", "cryptography", "cffi"
   end
 
   test do
