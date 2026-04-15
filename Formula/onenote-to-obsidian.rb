@@ -83,9 +83,9 @@ class OnenoteToObsidian < Formula
   def install
     venv = virtualenv_create(libexec, "python3.12")
     venv.pip_install resources
-    venv.pip_install_and_link(buildpath, build_isolation: false)
+    venv.pip_install_and_link buildpath
 
-    # Install cryptography and cffi from wheels (avoids Rust/LLVM build dependency)
+    # Install cryptography and cffi from pre-built wheels (avoids Rust/LLVM build dependency)
     system libexec/"bin/pip", "install", "--only-binary=:all:", "cryptography", "cffi"
   end
 
